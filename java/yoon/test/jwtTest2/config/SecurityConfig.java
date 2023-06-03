@@ -30,7 +30,9 @@ public class SecurityConfig {
                 .csrf(csrf->csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth->{
-                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("/login", "/main", "/").permitAll();
+                    auth.requestMatchers("/admin").hasAnyRole("USER");
+                    auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

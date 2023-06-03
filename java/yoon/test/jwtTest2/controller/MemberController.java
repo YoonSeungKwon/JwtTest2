@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import yoon.test.jwtTest2.dto.MemberDto;
+import yoon.test.jwtTest2.jwt.JwtTokenProvider;
 import yoon.test.jwtTest2.service.MemberService;
 
 @Controller
@@ -14,6 +16,7 @@ import yoon.test.jwtTest2.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/join")
     public String join(MemberDto dto){
@@ -27,7 +30,10 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(MemberDto dto){
+    public String login(@RequestParam("id") String id,
+                        @RequestParam("password") String password,
+                        Model model){
+        String token = memberService.login(id, password);
         return "main";
     }
 

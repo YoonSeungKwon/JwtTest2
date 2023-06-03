@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Main Page</title>
@@ -23,5 +23,9 @@
         <input type="submit" value="register">
     </form>
     <a href="/login">Login</a>
+    <a href="/admin">Admin</a>
+
+    JWT:<p th:if="${token}" th:text="${token}"></p>
+
 </body>
 </html>

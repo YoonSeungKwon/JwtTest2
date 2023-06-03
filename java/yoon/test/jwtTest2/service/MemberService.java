@@ -21,22 +21,24 @@ public class MemberService {
 
     @Transactional
     public void join(MemberDto dto){
+        System.out.println(passwordEncoder.encode(dto.getPassword()));
         Member member = Member.builder()
                 .id(dto.getId())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
+                .role("USER")
                 .build();
         memberRepository.save(member);
     }
 
     @Transactional
-    public String login(MemberDto dto){
-        Member member = memberRepository.findById(dto.getId());
+    public String login(String id, String password){
+        Member member = memberRepository.findById(id);
 
         if(member == null)
-            throw new IllegalArgumentException(dto.getName() + "를 찾을 수 없습니다.");
+            throw new IllegalArgumentException(id + "를 찾을 수 없습니다.");
 
-        if(!passwordEncoder.matches(dto.getPassword(), member.getPassword()))
+        if(!passwordEncoder.matches(password, member.getPassword()))
             throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
 
         return jwtTokenProvider.createToken(member.getUsername(), member.getPassword());
